@@ -41,6 +41,8 @@ if(process.env.NODE_ENV != "production"){
   })
   .catch(err => console.log(err));
   
+  const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
   // ======================================Express sessions =========================
   const store = MongoStore.create({
     mongoUrl:dbUrl,
