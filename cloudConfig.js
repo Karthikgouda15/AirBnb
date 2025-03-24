@@ -15,7 +15,6 @@ const storage = new CloudinaryStorage({
       allowedformats: ["png", "jpg", "jpeg"],
        },
   });
-  const { CloudinaryStorage } = require('multer-storage-cloudinary');
   module.exports = {
     cloudinary,
     storage,
