@@ -1,62 +1,138 @@
 <style>
-  .search-btn{
+  /* 1. Glassmorphism & Floating Effect */
+  .navbar {
+    background: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 0.75rem 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+
+  /* 2. Unique Centered Search Pill */
+  .search-container {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 40px;
+    padding: 0.2rem 0.5rem 0.2rem 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  }
+
+  .search-container:hover {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  }
+
+  .search-inp {
+    border: none !important;
+    font-size: 0.9rem;
+    font-weight: 500;
+    width: 200px; /* Expands on focus */
+    transition: width 0.4s ease;
+  }
+
+  .search-inp:focus {
+    width: 280px;
+    box-shadow: none !important;
+  }
+
+  .search-btn {
     background-color: #fe424d;
     color: #fff;
-    border-radius: 25px;
-    padding: 0 1rem 0 1rem;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: transform 0.2s;
   }
-  .search-btn:hover{
+
+  .search-btn:hover {
+    background-color: #ff385c;
+    transform: scale(1.05);
+  }
+
+  /* 3. Navigation Link Styling */
+  .nav-link {
+    color: #222 !important;
+    font-weight: 500;
+    font-size: 0.95rem;
+    margin: 0 0.5rem;
+    position: relative;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
     background-color: #fe424d;
-    color: #fff;
+    transition: all 0.3s ease;
   }
-  .search-btn i{
-    display: inline;
+
+  .nav-link:hover::after {
+    width: 80%;
+    left: 10%;
   }
-  .search-inp{
-    border-radius: 25px;
-    padding: 0.5rem 2rem 0.5rem 2rem;
-    font-size:1rem;
+
+  /* Brand Icon color */
+  .navbar-brand i {
+    color: #fe424d;
+    font-size: 1.8rem;
   }
 </style>
 
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <a class="nav-link" href="/listings">Explore</a>
-        </div>
-        <div class="navbar-nav ms-auto">
-          <form class="d-flex" role="search">
-            <input class="form-control me-2 search-inp" type="search" placeholder="Search destinations">
-            <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-          </form>
-        </div>
-        <div class="navbar-nav ms-auto">
-          <a class="nav-link" href="/listings/new">Staybnb your home</a>
-          <% if(!currUser){ %>
-          <a class="nav-link " href="/signup"><b>SignUp</b></a>
-          <a class="nav-link" href="/login"><b>Log in</b></a>
-          <% } %>
-          <% if(currUser){ %>
-          <a class="nav-link" href="/logout"><b>Log out</b></a>
+<nav class="navbar navbar-expand-md sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/listings">
+      <i class="fa-solid fa-compass"></i>
+    </a>
+
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link" href="/listings">Explore</a>
+      </div>
+
+      <div class="mx-auto">
+        <form class="d-flex search-container align-items-center" role="search">
+          <input id="search-input" class="form-control search-inp" type="search" placeholder="Where to go?">
+          <button id="search-btn" class="btn search-btn" type="submit">
+            <i class="fa-solid fa-magnifying-glass fa-xs"></i>
+          </button>
+        </form>
+      </div>
+
+      <div class="navbar-nav align-items-center">
+        <a class="nav-link d-none d-lg-block" href="/listings/new">Airbnb your home</a>
+        
+        <div class="ms-2 d-flex align-items-center bg-white border rounded-pill px-2 py-1 shadow-sm">
+          <% if(!currUser) { %>
+            <a class="nav-link py-1" href="/signup"><b>Sign up</b></a>
+            <div class="vr mx-1 my-2"></div>
+            <a class="nav-link py-1" href="/login">Log in</a>
+          <% } else { %>
+            <a class="nav-link py-1" href="/logout"><i class="fa-solid fa-circle-user me-1"></i> Log out</a>
           <% } %>
         </div>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <script type="module">
-    let searchBtn = document.getElementById("search-btn");
-    searchBtn.addEventListener("click", (event) => {
-      event.preventDefault();
-      let searchValue = document.getElementById("search").value;
-      if (searchValue.trim() !== "") {
-        var url = "/listings/?search=" + encodeURIComponent(searchValue);
-        window.location.href = url;
-      }
-    });
-  </script>
+<script>
+  // Search Script
+  document.getElementById("search-btn").addEventListener("click", (e) => {
+    e.preventDefault();
+    let val = document.getElementById("search-input").value;
+    if (val.trim()) {
+      window.location.href = `/listings/?search=${encodeURIComponent(val)}`;
+    }
+  });
+</script>
